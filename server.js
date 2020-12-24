@@ -1,6 +1,8 @@
-const sqlite3 = require("sqlite3").verbose();
 const express = require("express");
 
+const sqlite3 = require("sqlite3").verbose();
+
+const inputCheck= require("./utils/inputCheck");
 const PORT = process.env.PORT || 3001;
 const app = express();
 
@@ -59,6 +61,14 @@ db.run(sql, params, function (err, result) {
   });
 });
 });
+app.post('/api/candidate',({body},res)=>{
+const errors = inputCheck(body,'first_name', 'last_name', 'industry_connected');
+if(errors){
+    res.status(400).json({error: err.errors});
+    return;
+}
+});
+
 //Default response for any other requests(Not Found) Catch all
 //Create a candidates
 const sql = `INSERT INTO CANDIDATES (id,first_name,last_name,industry_connected)VALUES(?,?,?,?)`;
