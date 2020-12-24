@@ -44,11 +44,20 @@ db.get(sql,params, (error, row) => {
   });
 });
 });
-db.run(`DELETE FROM candidates WHERE id=?`, 1, function (err, result) {
+app.delete(`/api/candidate/:id`,(req,res)=>{
+    const sql= `DELETE FROM candidates WHERE id=?`;
+    const params=[req.params.id];
+
+db.run(sql, params, function (err, result) {
   if (err) {
-    console.log(err);
+     res.status(400).json({error: err.message});
+     return;
   }
-  console.log(result, this, this.changes);
+  res.json({
+      message: 'successfully deleted',
+      changes:this.changes
+  });
+});
 });
 //Default response for any other requests(Not Found) Catch all
 //Create a candidates
