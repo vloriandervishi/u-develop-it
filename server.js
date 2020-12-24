@@ -23,7 +23,12 @@ db.get(`SELECT *FROM candidates WHERE id =1`, (error,row)=>{
     }
     console.log(row);
 });
-db.
+db.run(`DELETE FROM candidates WHERE id=?`,1,function(err,result){
+ if(err){
+     console.log(err);
+ }
+ console.log(result,this,this.changes);
+});
 // Default response for any other requests(Not Found) Catch all
 app.use((req, res) => {
   res.status(404).end();
