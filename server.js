@@ -14,31 +14,42 @@ const db = new sqlite3.Database("./db/schema.sql", (err) => {
   }
   console.log("connected to the election database.");
 });
-db.all(`SELECT *FROM candidates`,(err,rows)=>{
-     console.log(rows);
-});
-db.get(`SELECT *FROM candidates WHERE id =1`, (error,row)=>{
-    if(error){
-        console.log(error);
+app.get('/api/candidates',(req,res)=>{
+
+const sql= `SELECT *FROM candidates`;
+const params=[];
+db.all(sql,params, (err, rows) => {
+    if(err){
+        res.status(500).json({error:err.message});
     }
-    console.log(row);
+  res.json({
+      message:'success',
+      data: rows
+  });
 });
-db.run(`DELETE FROM candidates WHERE id=?`,1,function(err,result){
- if(err){
-     console.log(err);
- }
- console.log(result,this,this.changes);
 });
-Default response for any other requests(Not Found) Catch all
-Create a candidates
-const sql= `INSERT INTO CANDIDATES (id,first_name,last_name,industry_connected)VALUES(?,?,?,?)`;
-const params= [1,'Ronald','Firbank',1];
-//es5 function, not arrow function, to use this 
-db.run(sql,params,function(err,result){
-  if(err){
-      console.log(err)
+db.get(`SELECT *FROM candidates WHERE id =1`, (error, row) => {
+  if (error) {
+    console.log(error);
   }
-  console.log(result,this.lastID);
+  console.log(row);
+});
+db.run(`DELETE FROM candidates WHERE id=?`, 1, function (err, result) {
+  if (err) {
+    console.log(err);
+  }
+  console.log(result, this, this.changes);
+});
+//Default response for any other requests(Not Found) Catch all
+//Create a candidates
+const sql = `INSERT INTO CANDIDATES (id,first_name,last_name,industry_connected)VALUES(?,?,?,?)`;
+const params = [1, "Ronald", "Firbank", 1];
+//es5 function, not arrow function, to use this
+db.run(sql, params, function (err, result) {
+  if (err) {
+    console.log(err);
+  }
+  console.log(result, this.lastID);
 });
 app.use((req, res) => {
   res.status(404).end();
