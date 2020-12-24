@@ -28,11 +28,21 @@ db.all(sql,params, (err, rows) => {
   });
 });
 });
-db.get(`SELECT *FROM candidates WHERE id =1`, (error, row) => {
+app.get('/api/candidate/:id',(req,res)=>{
+   const sql= `SELECT *FROM candidates WHERE id =?`;
+   const params= [req.params.id];
+
+
+db.get(sql,params, (error, row) => {
   if (error) {
-    console.log(error);
+    res.status(400).json({error:err.message});
+    return;
   }
-  console.log(row);
+  res.json({
+      message: 'success',
+      data:row
+  });
+});
 });
 db.run(`DELETE FROM candidates WHERE id=?`, 1, function (err, result) {
   if (err) {
