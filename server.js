@@ -23,14 +23,14 @@ db.get(`SELECT *FROM candidates WHERE id =1`, (error,row)=>{
     }
     console.log(row);
 });
-// db.run(`DELETE FROM candidates WHERE id=?`,1,function(err,result){
-//  if(err){
-//      console.log(err);
-//  }
-//  console.log(result,this,this.changes);
-// });
-// Default response for any other requests(Not Found) Catch all
-// Create a candidates
+db.run(`DELETE FROM candidates WHERE id=?`,1,function(err,result){
+ if(err){
+     console.log(err);
+ }
+ console.log(result,this,this.changes);
+});
+Default response for any other requests(Not Found) Catch all
+Create a candidates
 const sql= `INSERT INTO CANDIDATES (id,first_name,last_name,industry_connected)VALUES(?,?,?,?)`;
 const params= [1,'Ronald','Firbank',1];
 //es5 function, not arrow function, to use this 
