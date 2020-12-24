@@ -1,4 +1,5 @@
-const express = require('express');
+const sqlite3 = require("sqlite3").verbose();
+const express = require("express");
 
 const PORT = process.env.PORT || 3001;
 const app = express();
@@ -7,6 +8,22 @@ const app = express();
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
+const db = new sqlite3.Database("./db/schema.sql", (err) => {
+  if (err) {
+    return console.error(err.message);
+  }
+  console.log("connected to the election database.");
+});
+db.all(`SELECT *FROM candidates`,(err,rows)=>{
+     console.log(rows);
+});
+db.get(`SELECT *FROM candidates WHERE id =1`, (error,row)=>{
+    if(error){
+        console.log(error);
+    }
+    console.log(row);
+});
+db.
 // Default response for any other requests(Not Found) Catch all
 app.use((req, res) => {
   res.status(404).end();
